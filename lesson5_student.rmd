@@ -16,7 +16,7 @@ Notes:
 
 ```{r Third Qualitative Variable}
 library(ggplot2)
-pf<-read.csv("D:/Excellent/python/da-advance/R-lesson/pseudo_facebook.tsv",sep="\t")
+pf<-read.csv("C:/Excellent/da-advance/R-lesson/pseudo_facebook.tsv",sep="\t")
 library(dplyr)
 
 pf.fc_by_age_gender <- pf %>%
@@ -136,7 +136,9 @@ ggplot(aes(x = age, y = friend_count),
 Notes:
 
 ```{r Plot the Grand Mean}
-
+ggplot(aes(x = age, y = friend_count), 
+              data = subset(pf, !is.na(pf$year_joined.bucket))) + 
+  geom_line(aes(color =year_joined.bucket ), stat = 'summary', fun.y = mean)+geom_line(stat='summary',fun.y=mean,linetype=2)
 ```
 
 ***
@@ -145,7 +147,7 @@ Notes:
 Notes:
 
 ```{r Friending Rate}
-
+with(subset(pf,tenure>=1),summary(friend_count/tenure))
 ```
 
 ***
@@ -154,9 +156,9 @@ Notes:
 Notes:
 
 What is the median friend rate?
-
+0.22
 What is the maximum friend rate?
-
+417
 ```{r Friendships Initiated}
 
 ```
@@ -192,6 +194,8 @@ ggplot(aes(x = 90 * round(tenure / 90), y = friendships_initiated / tenure),
             stat = "summary",
             fun.y = mean)
 
+ggplot(aes(x=tenure,y=friendships_initiated / tenure),data=subset(pf,tenure>=1))+geom_smooth(aes(color=year_joined.bucket))
+
 ```
 
 ***
@@ -210,6 +214,9 @@ Notes:
 Notes:
 
 ```{r Histograms Revisited}
+yo<-read.csv('C:/Excellent/da-advance/R-lesson/yogurt.csv')
+str(yo)
+yo$id<-factor(yo$id)
 
 ```
 
