@@ -16,7 +16,7 @@ Notes:
 
 ```{r Third Qualitative Variable}
 library(ggplot2)
-pf<-read.csv("C:/Excellent/da-advance/R-lesson/pseudo_facebook.tsv",sep="\t")
+pf<-read.csv("D:/Excellent/python/da-advance/R-lesson/pseudo_facebook.tsv",sep="\t")
 library(dplyr)
 
 pf.fc_by_age_gender <- pf %>%
@@ -214,10 +214,10 @@ Notes:
 Notes:
 
 ```{r Histograms Revisited}
-yo<-read.csv('C:/Excellent/da-advance/R-lesson/yogurt.csv')
+yo<-read.csv('D:/Excellent/python/da-advance/R-lesson/yogurt.csv')
 str(yo)
 yo$id<-factor(yo$id)
-
+ggplot(aes(x=price),data=yo)+geom_histogram(binwidth = 10)
 ```
 
 ***
@@ -226,7 +226,12 @@ yo$id<-factor(yo$id)
 Notes:
 
 ```{r Number of Purchases}
-
+length(unique(yo$price))
+table(yo$price)
+View(yo)
+summary(yo)
+yo<-transform(yo,all.purchases=strawberry+blueberry+pina.colada+plain+mixed.berry)
+summary(yo$all.purchases)
 ```
 
 ***
@@ -235,7 +240,8 @@ Notes:
 Notes:
 
 ```{r Prices over Time}
-
+names(yo)
+ggplot(aes(x=time,y=price),data=yo)+geom_jitter(alpha=1/4,shape=21)
 ```
 
 ***
@@ -248,7 +254,10 @@ Notes:
 ### Looking at Samples of Households
 
 ```{r Looking at Sample of Households}
+set.seed(4230)
+sample.ids<-sample(levels(yo$id),16)
 
+ggplot(aes(x=time,y=price),data=subset(yo,id %in% sample.ids))+facet_wrap(~ id)+geom_line()+geom_point(aes(size=all.purchases),pch=1)
 ```
 
 ***
@@ -266,6 +275,14 @@ Notes:
 ### Scatterplot Matrix
 Notes:
 
+```{r}
+install.packages('GGally')
+library(GGally)
+set.seed(1836)
+pf_subset<-pf[,c(2:15)]
+names(pf_subset)
+ggpairs(pf_subset[sample.int(nrow(pf_subset),1000),])
+```
 ***
 
 ### Even More Variables
@@ -277,11 +294,12 @@ Notes:
 Notes:
 
 ```{r}
-nci <- read.table("nci.tsv")
+nci <- read.table("D:/Excellent/python/da-advance/R-lesson/nci.tsv")
 colnames(nci) <- c(1:64)
 ```
 
 ```{r}
+library(reshape2)
 nci.long.samp <- melt(as.matrix(nci[1:200,]))
 names(nci.long.samp) <- c("gene", "case", "value")
 head(nci.long.samp)
